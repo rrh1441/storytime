@@ -1,11 +1,9 @@
 // src/app/layout.tsx
-// Updated: Cleaned whitespace, integrated Footer, uses Next.js compatible AuthProvider & Navbar.
 import './globals.css';
 import React, { ReactNode } from 'react'; // Use React import
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
-import { Toaster as SonnerToaster } from '@/components/ui/sonner';
-import { Toaster as ShadcnToaster } from '@/components/ui/toaster';
+import { Toaster as ShadcnToaster } from '@/components/ui/toaster'; // Keep Shadcn toaster
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -34,8 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
        <Navbar /> {/* Uses useAuth internally */}
        <main className="flex-grow">{children}</main>
        <Footer /> {/* Render Footer */}
-       <ShadcnToaster />
-       <SonnerToaster />
+       <ShadcnToaster /> {/* Include only the Shadcn toaster */}
       </AuthProvider>
      </TooltipProvider>
     </QueryClientProvider>
