@@ -1,147 +1,149 @@
 // src/components/layout/Navbar.tsx
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { BookOpen, Menu, X, Tag } from "lucide-react";
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { BookOpen, Menu, Tag, X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-// Removed Skeleton import as it's no longer used here
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, logout, loading } = useAuth(); // Get 'loading'
+  const { user, logout, loading } = useAuth();
+  const router = useRouter();
 
-  // Logging remains for debugging if needed
+  // Debug auth state on mount / update
   useEffect(() => {
-    console.log("Navbar received Auth State - Loading:", loading, "User:", !!user);
+    console.log('[Navbar] Auth State — Loading:', loading, 'User:', !!user);
   }, [loading, user]);
 
+  // Close mobile menu on resize ≥ 768 px
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMenuOpen(false);
-      }
+      if (window.innerWidth >= 768) setIsMenuOpen(false);
     };
     window.addEventListener('resize', handleResize);
-    // Close menu on initial mount in case resize happens before interaction
-    setIsMenuOpen(false);
+    setIsMenuOpen(false); // ensure closed on mount
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleLogout = async () => {
     try {
-      setIsMenuOpen(false); // Close mobile menu on logout
-      await logout();
-      // Navigation will happen automatically via AuthContext/ProtectedRoute
-    } catch (error) {
-      console.error("Logout failed:", error);
-      // Optionally show a toast notification for logout failure
+      setIsMenuOpen(false);
+      const { error } = await logout();
+      if (error) {
+        console.error('Logout failed:', error);
+      } else {
+        router.push('/login');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error('Logout failed (catch):', err);
     }
   };
 
   const closeMobileMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="py-4 px-6 md:px-8 bg-white shadow-sm sticky top-0 z-40">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
+    <nav className="sticky top-0 z-40 bg-white px-6 py-4 shadow-sm md:px-8">
+      <div className="container mx-auto flex items-center justify-between">
+        <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
           <BookOpen className="h-8 w-8 text-[#8A4FFF]" />
-          <span className="text-2xl font-display font-bold text-[#4FB8FF]">
-            StoryTime
-          </span>
+          <span className="font-display text-2xl font-bold text-[#4FB8FF]">StoryTime</span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-          <a
+        {/* Desktop menu */}
+        <div className="hidden items-center space-x-6 md:flex lg:space-x-8">
+          <Link
             href="/#how-it-works"
-            className="font-medium text-gray-600 hover:text-[#8A4FFF] transition-colors"
+            scroll
+            className="font-medium text-gray-600 transition-colors hover:text-[#8A4FFF]"
           >
             How It Works
-          </a>
+          </Link>
+
           <Link
-            to="/pricing"
-            className="font-medium text-gray-600 hover:text-[#8A4FFF] transition-colors flex items-center gap-1"
+            href="/pricing"
+            className="flex items-center gap-1 font-medium text-gray-600 transition-colors hover:text-[#8A4FFF]"
           >
             <Tag className="h-4 w-4" /> Pricing
           </Link>
 
-          {/* --- MODIFIED CONDITIONAL RENDERING --- */}
-          {user && !loading ? ( // Show logged-in state only if user exists AND loading is finished
-            // Logged In State
+          {user && !loading ? (
             <>
               <Link
-                to="/dashboard"
-                className="font-medium text-gray-600 hover:text-[#8A4FFF] transition-colors"
+                href="/dashboard"
+                className="font-medium text-gray-600 transition-colors hover:text-[#8A4FFF]"
               >
                 Dashboard
               </Link>
               <Button
                 variant="outline"
-                className="font-medium border-[#FF9F51] text-[#FF9F51] hover:bg-[#FF9F51]/10 rounded-full h-9 px-4"
+                className="h-9 rounded-full border-[#FF9F51] px-4 font-medium text-[#FF9F51] hover:bg-[#FF9F51]/10"
                 onClick={handleLogout}
               >
                 Log Out
               </Button>
             </>
-          ) : ( // Show logged-out state if no user OR if still loading
-            // Logged Out State (or Loading State)
+          ) : !loading ? (
             <div className="flex items-center space-x-3">
-              <Link to="/login">
+              <Link href="/login">
                 <Button
                   variant="outline"
-                  className="font-medium border-gray-300 hover:border-[#8A4FFF] hover:text-[#8A4FFF] rounded-full h-9 px-4"
+                  className="h-9 rounded-full border-gray-300 px-4 font-medium hover:border-[#8A4FFF] hover:text-[#8A4FFF]"
                 >
                   Log in
                 </Button>
               </Link>
-              <Link to="/signup">
-                <Button
-                  className="bg-[#4FB8FF] hover:bg-[#4FB8FF]/90 text-white font-medium rounded-full shadow-sm h-9 px-4"
-                >
+              <Link href="/signup">
+                <Button className="h-9 rounded-full bg-[#4FB8FF] px-4 font-medium text-white shadow-sm hover:bg-[#4FB8FF]/90">
                   Sign Up Free
                 </Button>
               </Link>
             </div>
-          )}
-          {/* --- END MODIFICATION --- */}
-
+          ) : null}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile menu toggle */}
         <button
-          className="md:hidden p-1"
+          className="p-1 md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen}
         >
-          {isMenuOpen ? <X className="h-6 w-6 text-gray-700" /> : <Menu className="h-6 w-6 text-gray-700" />}
+          {isMenuOpen ? (
+            <X className="h-6 w-6 text-gray-700" />
+          ) : (
+            <Menu className="h-6 w-6 text-gray-700" />
+          )}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="absolute top-[69px] left-0 w-full bg-white shadow-md md:hidden z-30 border-t border-gray-100">
-          <div className="flex flex-col p-6 space-y-5">
-            <a
+        <div className="absolute left-0 top-[69px] z-30 w-full border-t border-gray-100 bg-white shadow-md md:hidden">
+          <div className="flex flex-col space-y-5 p-6">
+            <Link
               href="/#how-it-works"
+              scroll
               className="text-lg font-medium text-gray-700 hover:text-[#8A4FFF]"
               onClick={closeMobileMenu}
             >
               How It Works
-            </a>
+            </Link>
             <Link
-              to="/pricing"
-              className="text-lg font-medium text-gray-700 hover:text-[#8A4FFF] flex items-center gap-2"
+              href="/pricing"
+              className="flex items-center gap-2 text-lg font-medium text-gray-700 hover:text-[#8A4FFF]"
               onClick={closeMobileMenu}
             >
-               <Tag className="h-5 w-5" /> Pricing
+              <Tag className="h-5 w-5" /> Pricing
             </Link>
 
-            {/* --- MODIFIED MOBILE CONDITIONAL RENDERING --- */}
-            {user && !loading ? ( // Show logged-in state only if user exists AND loading is finished
+            {user && !loading ? (
               <>
                 <Link
-                  to="/dashboard"
+                  href="/dashboard"
                   className="text-lg font-medium text-gray-700 hover:text-[#8A4FFF]"
                   onClick={closeMobileMenu}
                 >
@@ -149,27 +151,26 @@ const Navbar = () => {
                 </Link>
                 <Button
                   variant="outline"
-                  className="w-full font-medium border-[#FF9F51] text-[#FF9F51] hover:bg-[#FF9F51]/10 rounded-full"
-                  onClick={handleLogout} // Logout function closes menu internally now
+                  className="w-full rounded-full border-[#FF9F51] font-medium text-[#FF9F51] hover:bg-[#FF9F51]/10"
+                  onClick={handleLogout}
                 >
                   Log Out
                 </Button>
               </>
-            ) : ( // Show logged-out state if no  user OR if still loading
-              <div className="pt-4 space-y-4">
-                <Link to="/login" onClick={closeMobileMenu}>
-                  <Button className="w-full font-medium rounded-full" variant="outline">
+            ) : !loading ? (
+              <div className="space-y-4 pt-4">
+                <Link href="/login" onClick={closeMobileMenu}>
+                  <Button className="w-full rounded-full font-medium" variant="outline">
                     Log in
                   </Button>
                 </Link>
-                <Link to="/signup" onClick={closeMobileMenu}>
-                  <Button className="w-full bg-[#4FB8FF] hover:bg-[#4FB8FF]/90 text-white font-medium rounded-full">
+                <Link href="/signup" onClick={closeMobileMenu}>
+                  <Button className="w-full rounded-full bg-[#4FB8FF] font-medium text-white hover:bg-[#4FB8FF]/90">
                     Sign Up Free
                   </Button>
                 </Link>
               </div>
-            )}
-             {/* --- END MODIFICATION --- */}
+            ) : null}
           </div>
         </div>
       )}

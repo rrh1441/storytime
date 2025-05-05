@@ -1,27 +1,24 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+// src/app/not-found.tsx
+// Updated for Next.js: Removed client hooks and uses next/link.
+import Link from 'next/link'; // Use Next.js Link
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
+// No "use client" needed as we removed the hooks. This can be a Server Component.
+export default function NotFound() {
+  // No need to log the path here; Next.js handles triggering this page.
+  // Server-side logging or analytics can track 404s if needed.
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
+        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+        <p className="text-2xl text-gray-600 mb-8">Oops! Page Not Found</p>
+        <p className="text-gray-500 mb-8">
+          Sorry, the page you are looking for doesn't exist or has been moved.
+        </p>
+        <Link href="/" className="px-6 py-3 bg-[#4FB8FF] text-white font-semibold rounded-md hover:bg-[#4FB8FF]/90 transition-colors">
           Return to Home
-        </a>
+        </Link>
       </div>
     </div>
   );
-};
-
-export default NotFound;
+}
