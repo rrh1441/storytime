@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
        <Navbar /> {/* Uses useAuth internally */}
        <main className="flex-grow">{children}</main>
        <Footer /> {/* Render Footer */}
-       <ShadcnToaster /> {/* Include only the Shadcn toaster */}
+       <ShadcnToaster /> {/* Incl ude only the Shadcn toaster */}
       </AuthProvider>
      </TooltipProvider>
     </QueryClientProvider>
