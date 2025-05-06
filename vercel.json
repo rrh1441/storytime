@@ -1,0 +1,11 @@
+{
+    "version": 3,
+    "functions": {
+      "api/**/*.ts": {            // every file under src/app/api/
+        "runtime": "fluid",       // Vercel Fluid compute
+        "maxDuration": 30,        // same limits you used on Fly (tunable)
+        "memory": 1024
+      }
+    }
+  }
+  
