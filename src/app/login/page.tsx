@@ -131,10 +131,9 @@ export default function LoginPage() {
       </Button>
      </form>
     </Form>
-    <div className="mt-6 text-center text-sm text-[#6b7280]">
-     Don't have an account?{' '}
-     {/* Use Next.js Link */}
-     <Link href="/signup" className="font-medium text-[#06D6A0] hover:text-[#06D6A0]/80 underline"> {/* Use theme color */}
+    <div className="mt-6 text-center text-sm text-gray-500 mt-4">
+     Don&apos;t have an account?{' '}
+     <Link href="/signup" className="text-primary-600 hover:underline font-medium">
       Sign up
      </Link>
     </div>

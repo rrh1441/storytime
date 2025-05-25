@@ -200,7 +200,7 @@ export default function VoiceProfiles() {
             <div className="border rounded-md p-4 space-y-4">
              <h4 className="font-medium text-center">Please read the following text:</h4>
              <p className="text-gray-700 italic text-sm">
-              "Once upon a time in a land of endless wonder, there lived a curious child who loved to explore. Every day brought new adventures and discoveries, from the tallest trees to the smallest flowers. The world was full of magic for those who took the time to notice the little things. And so our story begins, with a heart full of courage and eyes wide open to the possibilities that await."
+              &quot;Once upon a time in a land of endless wonder, there lived a curious child who loved to explore. Every day brought new adventures and discoveries, from the tallest trees to the smallest flowers. The world was full of magic for those who took the time to notice the little things. And so our story begins, with a heart full of courage and eyes wide open to the possibilities that await.&quot;
              </p>
              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div className="bg-[#8A4FFF] h-2.5 rounded-full transition-all duration-500 ease-linear" style={{ width: `${recordingProgress}%` }}></div>

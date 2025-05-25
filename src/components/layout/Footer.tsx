@@ -69,9 +69,8 @@ const Footer = () => {
 
         {/* Bottom Copyright Section */}
         <div className="border-t border-[#06D6A0]/20 pt-8">
-          <p className="text-center text-sm text-[#6b7280]">
-            &copy; {new Date().getFullYear()} StoryTime. All rights reserved.
-            Made with Magic ✨.
+          <p className="text-center text-gray-400 text-sm mt-8">
+            &copy; {new Date().getFullYear()} Storytime. All rights reserved. Let&apos;s make bedtime magical.
           </p>
         </div>
       </div>
