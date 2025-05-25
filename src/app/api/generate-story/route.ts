@@ -1,5 +1,10 @@
 import { openai, TEXT_MODEL } from "@/lib/openai";
-import { supabaseService }     from "@/lib/supabase";
+// import { createClient } from '@supabase/supabase-js'; // Browser client, not for route handlers
+// import { supabaseService } from '@/lib/supabase/service'; // Assuming this is your service role client
+// const supabaseService = createClient( // This was likely an incorrect client for a route handler
+//   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+//   process.env.SUPABASE_SERVICE_ROLE_KEY!
+// );
 
 export const runtime = "fluid";
 
@@ -67,8 +72,9 @@ export async function POST(req: Request) {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
-  } catch (err: any) {
-    console.error("[generate-story]", err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+  } catch (error: unknown) {
+    console.error('Error generating story:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }

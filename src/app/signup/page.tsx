@@ -81,9 +81,11 @@ export default function SignupPage() {
      // Use replace to avoid adding signup page to history
      router.replace(finalRedirectUrl);
    }
-  } catch (error: any) { // Catch unexpected errors
-   console.error("Signup submission error:", error);
-   toast({ title: "Signup Error", description: error.message || "An unexpected error occurred.", variant: "destructive" });
+  } catch (error: unknown) { // Replace 'any' with 'unknown'
+    // Handle the error
+    // console.error((error as Error).message);
+    console.error("Signup submission error:", error);
+    toast({ title: "Signup Error", description: error instanceof Error ? error.message : "An unexpected error occurred.", variant: "destructive" });
   } finally {
    setIsSubmitting(false);
   }

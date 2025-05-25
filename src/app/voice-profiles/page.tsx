@@ -308,4 +308,15 @@ export default function VoiceProfiles() {
           <SelectContent>
            {/* Dynamically populate from state + samples */}
            {voiceProfiles.map(p => <SelectItem key={`prof-${p.id}`} value={`profile:${p.id}`}>{p.name} (Your Voice)</SelectItem>)}
-           {mockVoiceSamples.map(s => <SelectItem key={`samp-${s.id}`} value={`sample:${s.id}`
+           {mockVoiceSamples.map(s => <SelectItem key={`samp-${s.id}`} value={`sample:${s.id}`}>{s.name}{s.isPremium ? " (Premium)" : ""}</SelectItem>)}
+          </SelectContent>
+         </Select>
+        </div>
+       </CardContent>
+      </Card>
+     </div>
+    </div>
+   </div>
+  </div>
+ );
+}

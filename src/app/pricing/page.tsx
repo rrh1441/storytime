@@ -132,9 +132,9 @@ export default function PricingPage() {
    // If redirect succeeds, the user leaves this page. If it fails, the error is shown.
    // If it fails before calling redirectToCheckout, finally block will run.
 
-  } catch (error: any) {
+  } catch (error: unknown) {
    console.error('Subscription initiation failed:', error);
-   toast({ title: 'Subscription Error', description: error.message || 'Could not initiate checkout. Please try again.', variant: 'destructive' });
+   toast({ title: 'Subscription Error', description: (error as Error)?.message || 'Could not initiate checkout. Please try again.', variant: 'destructive' });
    setIsRedirecting((prev) => ({ ...prev, [priceId]: false })); // Only reset if error occurs before redirect attempt
   }
   // Removed finally block that always reset isRedirecting, as it's not needed after successful redirect attempt.

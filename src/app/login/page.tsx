@@ -57,10 +57,11 @@ export default function LoginPage() {
     toast({ title: 'Login Initiated', description: 'Checking credentials...' });
     setLoginAttempted(true); // Set flag indicating Supabase login call succeeded
    }
-  } catch (error: any) {
+  } catch (error: unknown) {
    // Catch unexpected errors during the login call itself
-   console.error('Login submission error:', error);
-   toast({ title: 'Login Error', description: error.message || 'An unexpected error occurred.', variant: 'destructive' });
+   const err = error as Error; // Type assertion
+   console.error('Login submission error:', err);
+   toast({ title: 'Login Error', description: err.message || 'An unexpected error occurred.', variant: 'destructive' });
    setLoginAttempted(false);
   } finally {
    setIsSubmitting(false); // Indicate form submission finished

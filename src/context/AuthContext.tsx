@@ -174,7 +174,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
  const signup = useCallback(
   async (args: { email: string; password: string; options?: { data?: Record<string, unknown>, emailRedirectTo?: string } }) => {
    // Pass user metadata (like name) in options.data
-   const { data, error } = await supabase.auth.signUp({
+   const { error } = await supabase.auth.signUp({
     email: args.email,
     password: args.password,
     options: args.options,

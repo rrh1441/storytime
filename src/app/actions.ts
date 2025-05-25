@@ -128,7 +128,7 @@ After the story, output a creative title **in ${language}** on a separate line s
 
     // 4. Insert into Supabase 'stories' table
     console.log('[generateStoryAction] Inserting story into Supabase...');
-    const insertPayload: Record<string, any> = {
+    const insertPayload: Record<string, string | number | boolean | undefined | null> = {
         user_id: user.id,
         title: title,
         content: story,
@@ -168,11 +168,9 @@ After the story, output a creative title **in ${language}** on a separate line s
 // --- Server Action: Generate TTS Audio ---
 interface GenerateTtsParams {
   text: string;
-  voiceId: string; // e.g., 'alloy', 'nova' (OpenAI voice IDs)
-  language: string; // e.g., 'English' (as passed from form) - Note: Not directly used by TTS API endpoint
-  storyId: string; // The ID of the story record in Supabase
-  // Optional: Add parameters for tone/style if using gpt-4o-mini-tts specific features
-  // tone?: string;
+  voiceId: "alloy" | "echo" | "fable" | "nova" | "onyx" | "shimmer" | string; // More specific or just string
+  language: string;
+  storyId: string;
 }
 
 export async function generateTtsAction(
@@ -211,7 +209,7 @@ export async function generateTtsAction(
     console.log(`[generateTtsAction] Requesting TTS from OpenAI (model: gpt-4o-mini-tts) for story ${params.storyId}...`);
     const speechResponse = await openai.audio.speech.create({
       model: 'gpt-4o-mini-tts', // *** USE gpt-4o-mini-tts AS REQUESTED ***
-      voice: params.voiceId as any, // Standard voice selection (alloy, echo, etc.)
+      voice: params.voiceId as "alloy" | "echo" | "fable" | "nova" | "onyx" | "shimmer", // Cast to known voices
       input: params.text,
       response_format: 'mp3', // Request MP3 directly, avoids ffmpeg
       // Add additional parameters here if controlling tone, e.g.:
@@ -273,12 +271,13 @@ export async function generateTtsAction(
 
     return { audioUrl: publicUrl };
 
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[generateTtsAction Error]', err);
-     if (err.response) {
-        console.error('OpenAI API Error Status:', err.response.status);
-        console.error('OpenAI API Error Data:', err.response.data);
+     const error = err as { response?: { status: number; data: unknown }, message?: string }; // Type assertion
+     if (error.response) {
+        console.error('OpenAI API Error Status:', error.response.status);
+        console.error('OpenAI API Error Data:', error.response.data);
     }
-    return { error: err.message || 'An unexpected error occurred during audio generation.' };
+    return { error: error.message || 'An unexpected error occurred during audio generation.' };
   }
 }
