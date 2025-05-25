@@ -13,7 +13,6 @@ import React, { // Use React import
 } from 'react';
 import type { Session, SupabaseClient, User, AuthError } from '@supabase/supabase-js';
 import { getSupabaseClient } from '@/lib/supabase/client'; // Ensure this imports the browser client
-import { toast } from '@/components/ui/use-toast'; // Use Shadcn toast hook directly
 
 // Define UserProfile based on your actual DB structure if needed
 // Fetched separately. Ensure columns match your DB.

@@ -4,7 +4,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link'; // Use Next.js Link
 import { useAuth } from '@/context/AuthContext'; // Use Next.js compatible context
-import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Ensure QueryClientProvider wraps this in layout or here
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -163,7 +162,7 @@ export default function Dashboard() {
           </ul>
         ) : (
           <div className="text-center py-10 border border-dashed rounded-lg">
-             <p className="text-gray-500">You haven’t created any stories yet.</p>
+             <p className="text-gray-500">You haven't created any stories yet.</p>
              <Link href="/create-story" className="mt-4 inline-block">
                 <Button>Create your first story</Button>
              </Link>

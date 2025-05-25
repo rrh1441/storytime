@@ -82,14 +82,14 @@ export default function VoiceProfiles() {
  // TODO: Replace useState with fetched data and mutation logic
  const [voiceProfiles, setVoiceProfiles] = useState(mockVoiceProfiles);
  // Recording simulation state
- const [isRecording, setIsRecording] = useState(false); // Maybe remove if unused
+ // const [isRecording, setIsRecording] = useState(false); // Maybe remove if unused
  const [recordingProgress, setRecordingProgress] = useState(0);
  const [recordingStage, setRecordingStage] = useState(0); // 0: Ready, 1: Recording, 2: Complete
 
  const startRecording = () => {
   // TODO: Implement actual browser recording logic using MediaRecorder API
   console.log("Starting recording simulation...");
-  setIsRecording(true);
+  // setIsRecording(true);
   setRecordingProgress(0);
   setRecordingStage(1);
 
@@ -99,7 +99,7 @@ export default function VoiceProfiles() {
     if (prev >= 100) {
      clearInterval(interval);
      console.log("Recording simulation complete.");
-     setIsRecording(false); // Recording done
+     // setIsRecording(false); // Recording done
      setRecordingStage(2); // Move to complete stage
      return 100;
     }
@@ -308,18 +308,4 @@ export default function VoiceProfiles() {
           <SelectContent>
            {/* Dynamically populate from state + samples */}
            {voiceProfiles.map(p => <SelectItem key={`prof-${p.id}`} value={`profile:${p.id}`}>{p.name} (Your Voice)</SelectItem>)}
-           {mockVoiceSamples.map(s => <SelectItem key={`samp-${s.id}`} value={`sample:${s.id}`}>{s.name}</SelectItem>)}
-          </SelectContent>
-         </Select>
-        </div>
-        <div>
-         <Button variant="outline" className="w-full flex items-center justify-center text-sm h-9"><Settings className="h-4 w-4 mr-2" /> Advanced Voice Settings</Button>
-        </div>
-       </CardContent>
-      </Card>
-     </div>
-    </div>
-   </div>
-  </div>
- );
-}
+           {mockVoiceSamples.map(s => <SelectItem key={`samp-${s.id}`} value={`sample:${s.id}`

@@ -158,14 +158,9 @@ After the story, output a creative title **in ${language}** on a separate line s
     console.log(`[generateStoryAction] Story inserted successfully. ID: ${newStoryData.id}`);
     return { story, title, storyId: newStoryData.id };
 
-  } catch (err: any) {
-    console.error('[generateStoryAction Error]', err);
-    // Check for specific OpenAI errors if needed
-    if (err.response) {
-        console.error('OpenAI API Error Status:', err.response.status);
-        console.error('OpenAI API Error Data:', err.response.data);
-    }
-    return { error: err.message || 'An unexpected error occurred during story generation.' };
+  } catch (error: unknown) {
+    console.error('[generateStoryAction]', error);
+    return { error: (error as Error).message || 'Failed to generate story' };
   }
 }
 

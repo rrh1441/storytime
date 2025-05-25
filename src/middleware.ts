@@ -60,7 +60,7 @@ export async function middleware(req: NextRequest) {
 
   /* --- 4. (Optional) forward user info header -------------------------- */
   const headers = new Headers(req.headers);
-  if (session) {x
+  if (session) {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) headers.set('x-user-info', JSON.stringify(user));
   }
