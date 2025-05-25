@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link'; // Use Next.js Link
-import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // Use Next.js navigation hooks
+import { useSearchParams, usePathname } from 'next/navigation'; // Use Next.js navigation hooks
+import { useMutation } from '@tanstack/react-query'; // Add this import
 
 // Import useAuth correctly - includes session information
 import { useAuth } from '@/context/AuthContext';
@@ -312,7 +313,7 @@ export default function StoryCreator() {
       }
       return result as { story: string; title: string; storyId: string };
     },
-    onSuccess: ({ story, title, storyId: newStoryId }) => {
+    onSuccess: ({ story, title, storyId: newStoryId }: { story: string; title: string; storyId: string }) => {
       setStoryContent(story);
       setStoryTitle(title);
       setStoryId(newStoryId); // Store the returned story ID
@@ -365,7 +366,7 @@ export default function StoryCreator() {
       }
       return result.audioUrl; // Return only the URL
     },
-    onSuccess: (url) => {
+    onSuccess: (url: string) => {
       setGeneratedAudioUrl(url);
       setActiveTab('share');
       previewAudioRef.current?.pause(); // Pause preview if playing

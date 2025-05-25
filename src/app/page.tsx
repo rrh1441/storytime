@@ -113,7 +113,9 @@ export default function Home() {
  useEffect(() => {
   const currentAudioRefs = audioRefs.current;
   return () => {
-   // Use currentAudioRefs in cleanup
+    currentAudioRefs.forEach((audioEl) => {
+      audioEl?.pause();
+    });
   };
  }, []);
 
