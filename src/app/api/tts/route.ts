@@ -1,4 +1,3 @@
-import { openai, TTS_MODEL } from "@/lib/openai";
 import { uploadAudio }       from "@/lib/storage";
 
 export const runtime = "nodejs";
@@ -53,8 +52,8 @@ export async function POST(req: Request) {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[tts]", err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: (err as Error).message }), { status: 500 });
   }
 }

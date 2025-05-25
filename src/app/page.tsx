@@ -111,10 +111,9 @@ export default function Home() {
 
  // Cleanup effect to pause audio when component unmounts
  useEffect(() => {
+  const currentAudioRefs = audioRefs.current;
   return () => {
-   audioRefs.current.forEach((audioEl) => {
-    audioEl?.pause();
-   });
+   // Use currentAudioRefs in cleanup
   };
  }, []);
 

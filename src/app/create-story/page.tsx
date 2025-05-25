@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState, KeyboardEvent } from 'react'; // Im
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useMutation, QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Assuming QueryClientProvider is in layout
 import Link from 'next/link'; // Use Next.js Link
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // Use Next.js navigation hooks
 
@@ -108,8 +107,7 @@ export type ActiveTab = 'parameters' | 'edit' | 'voice' | 'share';
 /* ─────────── Component ─────────── */
 export default function StoryCreator() {
   // Destructure user, profile, session and loading state correctly
-  const { user, profile, loading: authLoading, session, supabase } = useAuth(); // Get supabase client from context
-  const router = useRouter(); // Use Next.js router
+  const { user, profile, loading: authLoading } = useAuth(); // Get supabase client from context
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
