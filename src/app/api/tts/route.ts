@@ -1,7 +1,11 @@
 import { openai, TTS_MODEL } from "@/lib/openai";
 import { uploadAudio }       from "@/lib/storage";
 
-export const runtime = "fluid";
+export const runtime = "nodejs";
+
+export const config = {
+  runtime: 'nodejs',
+};
 
 export async function POST(req: Request) {
   try {

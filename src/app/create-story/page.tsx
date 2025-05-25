@@ -11,7 +11,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // Us
 
 // Import useAuth correctly - includes session information
 import { useAuth } from '@/context/AuthContext';
-import { toast } from '@/hooks/use-toast'; // Assuming this uses Shadcn toast or Sonner configured globally
+import { toast } from '@/hooks/use-toast'; // Correct the import path if necessary
 
 // --- IMPORT YOUR SERVER ACTIONS ---
 import { generateStoryAction, generateTtsAction } from '@/app/actions';
@@ -201,7 +201,7 @@ export default function StoryCreator() {
   const handleCopyLink = () => {
     if (!generatedAudioUrl) return;
     navigator.clipboard.writeText(generatedAudioUrl).then(() =>
-      toast({ title: 'Link copied', description: 'URL copied to clipboard.' }),
+      toast({ title: 'Link copied', description: 'URL copied to clipboard.', variant: 'success' })
     );
   };
 
@@ -244,15 +244,19 @@ export default function StoryCreator() {
     if (!previewAudioRef.current) {
       previewAudioRef.current = new Audio();
       previewAudioRef.current.preload = 'auto';
-      previewAudioRef.current.onerror = (e) => {
-        console.error(`Preview audio element error loading ${previewUrl}:`, e);
-        const target = e.target as HTMLAudioElement;
-        const errorDetails = target.error ? ` Code ${target.error.code}: ${target.error.message}` : '';
-        toast({
-          title: 'Preview Error',
-          description: `Could not load preview audio. Ensure '${voiceId}.mp3' exists in the '${PREVIEW_BUCKET_NAME}' bucket and is public.${errorDetails}`,
-          variant: 'destructive',
-        });
+      previewAudioRef.current.onerror = (event: Event | string) => {
+        if (typeof event === 'string') {
+            console.error(`Preview audio element error loading ${previewUrl}:`, event);
+        } else {
+            console.error(`Preview audio element error loading ${previewUrl}:`, event);
+            const target = event.currentTarget as HTMLAudioElement; // Correct type assertion
+            const errorDetails = target.error ? ` Code ${target.error.code}: ${target.error.message}` : '';
+            toast({
+                title: 'Preview Error',
+                description: `Could not load preview audio. Ensure '${voiceId}.mp3' exists in the '${PREVIEW_BUCKET_NAME}' bucket and is public.${errorDetails}`,
+                variant: 'destructive',
+            });
+        }
       };
     }
 
@@ -317,7 +321,7 @@ export default function StoryCreator() {
       setGeneratedAudioUrl(null); // Reset audio URL when new story is generated
       setIsPlaying(false); // Reset play state
       setActiveTab('edit');
-      toast({ title: 'Story Generated!', description: 'Review and edit your new tale.' });
+      toast({ title: 'Story Generated!', description: 'Review and edit your new tale.', variant: 'success' });
     },
     onError: (e: Error) => {
       console.error('[Mutation Error] generateStory:', e);
@@ -326,12 +330,6 @@ export default function StoryCreator() {
           title: 'Login Required',
           description: 'Please log in or sign up to generate stories.',
           variant: 'destructive',
-          action: (
-            <Button variant="outline" size="sm" onClick={() => router.push(`/login?redirect=${pathname}&tab=parameters`)}>
-              Log In
-            </Button>
-          ),
-          duration: 5000,
         });
       } else {
         toast({
@@ -373,7 +371,7 @@ export default function StoryCreator() {
       setGeneratedAudioUrl(url);
       setActiveTab('share');
       previewAudioRef.current?.pause(); // Pause preview if playing
-      toast({ title: 'Narration Ready!', description: 'Your story audio has been generated.' });
+      toast({ title: 'Narration Ready!', description: 'Your story audio has been generated.', variant: 'success' });
     },
     onError: (e: Error) => {
       console.error('[Mutation Error] generateAudio:', e);
@@ -476,7 +474,7 @@ export default function StoryCreator() {
           <form onSubmit={(e) => e.preventDefault()}>
             <Tabs
               value={activeTab}
-              onValueChange={(v) => setActiveTab(v as ActiveTab)}
+              onValueChange={(v: string) => setActiveTab(v as ActiveTab)}
               className="space-y-6"
             >
               <TabsList className="flex flex-wrap h-auto justify-start gap-x-2 gap-y-1 sm:justify-center">
@@ -535,7 +533,7 @@ export default function StoryCreator() {
                           <FormControl>
                              <RadioGroup
                                 className="flex flex-wrap gap-3" value={String(field.value)}
-                                onValueChange={(v) => field.onChange(Number(v))} // Update form state on change
+                                onValueChange={(v: string) => field.onChange(Number(v))} // Explicitly type 'v'
                              >
                                {LENGTH_OPTIONS.map((len) => {
                                  const disabled = !isSubscriber && len !== 3; // Disable options for non-subscribers except 3 min
@@ -715,7 +713,7 @@ export default function StoryCreator() {
                       className="w-full bg-[#4FB8FF] text-white hover:bg-[#4FB8FF]/90"
                       onClick={handleGenerateNarrationClick} // Call the specific handler
                       // Disable if pending, no voice selected, no content, no storyId, or language invalid
-                      disabled={generateAudio.isPending || !selectedVoiceId || !storyContent.trim() || !storyId || !SUPPORTED_LANGUAGES.includes(form.getValues("language"))}
+                      disabled={generateAudio.isPending || !selectedVoiceId || !storyContent.trim() || !storyId || !(SUPPORTED_LANGUAGES as readonly string[]).includes(form.getValues("language"))}
                     >
                       {generateAudio.isPending ? (
                         <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating…(~60s)</>
