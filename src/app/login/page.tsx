@@ -76,7 +76,7 @@ export default function LoginPage() {
    toast({ title: 'Login Successful!', description: 'Welcome back!' });
 
    // Get redirect path from query parameter or default to dashboard
-   const redirectPath = searchParams.get('redirect') || '/dashboard';
+   const redirectPath = searchParams?.get('redirect') || '/dashboard';
    // Avoid redirect loops back to login/signup
    const finalRedirectPath = (redirectPath === '/login' || redirectPath === '/signup') ? '/dashboard' : redirectPath;
 

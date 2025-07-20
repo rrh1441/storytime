@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link'; // Use Next.js Link
 import { useAuth } from '@/context/AuthContext'; // Use Next.js compatible context
+import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';

@@ -17,8 +17,8 @@ const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 // --- Initialize Stripe.js ---
 // Type definition for StripePromise
-type StripePromise = ReturnType<typeof loadStripe>;
-let stripePromise: Promise<StripePromise | null> | null = null; // Initialize as null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let stripePromise: Promise<any> | null = null; // Initialize as null
 
 if (typeof window !== 'undefined') { // Ensure this runs only on the client
  if (STRIPE_PUBLISHABLE_KEY && STRIPE_PUBLISHABLE_KEY.startsWith('pk_')) {
@@ -88,14 +88,10 @@ export default function PricingPage() {
    toast({
     title: 'Login Required',
     description: 'Please log in or sign up to subscribe.',
-    action: (
-     // Use Next.js router to navigate, pass redirect info via query params
-     <Button variant="outline" size="sm" onClick={() => router.push(`/login?redirect=${pathname}&priceId=${priceId}`)}>
-      Log In
-     </Button>
-    ),
+    variant: 'destructive'
    });
    setIsRedirecting((prev) => ({ ...prev, [priceId]: false }));
+   router.push(`/login?redirect=${pathname}&priceId=${priceId}`);
    return;
   }
 

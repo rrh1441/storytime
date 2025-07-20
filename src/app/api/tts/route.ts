@@ -8,11 +8,10 @@ export const config = {
 
 export async function POST(req: Request) {
   try {
-    const { text, voice, language = "English", filename = "speech.mp3" } =
+    const { text, voice, filename = "speech.mp3" } =
       (await req.json()) as {
         text: string;
         voice: string;
-        language?: string;
         filename?: string;
       };
 
@@ -30,10 +29,9 @@ export async function POST(req: Request) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: TTS_MODEL,
+        model: "tts-1",
         voice,
         input: text,
-        language,
         response_format: "mp3"
       })
     });

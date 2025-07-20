@@ -61,8 +61,8 @@ export default function SignupPage() {
      toast({ title: "Signup Successful!", description: "Welcome! Check your email for verification if required." });
 
      // Redirect logic after successful signup
-     const redirectPath = searchParams.get('redirect') || '/dashboard'; // Default redirect
-     const returnToTab = searchParams.get('tab'); // Check for tab parameter
+     const redirectPath = searchParams?.get('redirect') || '/dashboard'; // Default redirect
+     const returnToTab = searchParams?.get('tab'); // Check for tab parameter
 
      let finalRedirectUrl = redirectPath;
      // Avoid redirecting back to login/signup

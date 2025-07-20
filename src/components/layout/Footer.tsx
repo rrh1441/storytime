@@ -1,15 +1,13 @@
 // src/components/layout/Footer.tsx
-// Updated to use Next.js Link
 import Link from 'next/link';
 import { BookOpen, Mail } from 'lucide-react';
 
-const Footer = () => {
-  // No client hooks used, so no "use client" needed
+export default function Footer() {
   return (
     <footer className="mt-auto border-t border-[#06D6A0]/20 bg-[#FEF7CD]/40 pt-16 pb-12">
       <div className="container mx-auto px-6">
         <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-          {/* Logo Column */}
+          {/* Logo + blurb */}
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
             <Link href="/" className="mb-6 flex items-center space-x-2">
               <BookOpen className="h-6 w-6 text-[#8A4FFF]" />
@@ -18,12 +16,12 @@ const Footer = () => {
               </span>
             </Link>
             <p className="mb-4 text-sm text-[#6b7280]">
-              Create magical, personalized children's stories with AI assistance
-              and bring them to life with your own voice.
+              Create magical, personalized children&rsquo;s stories with AI
+              assistance and bring them to life with your own voice.
             </p>
           </div>
 
-          {/* Product Links Column */}
+          {/* Links */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#FF9F51]">
               Product
@@ -67,15 +65,14 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Copyright Section */}
+        {/* Copyright */}
         <div className="border-t border-[#06D6A0]/20 pt-8">
-          <p className="text-center text-gray-400 text-sm mt-8">
-            &copy; {new Date().getFullYear()} Storytime. All rights reserved. Let&apos;s make bedtime magical.
+          <p className="mt-8 text-center text-sm text-gray-400">
+            &copy; {new Date().getFullYear()} StoryTime. All rights reserved.
+            Let&nbsp;&rsquo;s&nbsp;make bedtime magical.
           </p>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

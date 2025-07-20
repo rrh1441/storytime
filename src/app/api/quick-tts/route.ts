@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const speech = await openai.audio.speech.create({
       model: 'tts-1',
       voice: 'alloy',           // pick any default narrator
-      format: 'mp3',
+      response_format: 'mp3',
       input: text,
     });
 
