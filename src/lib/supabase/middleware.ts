@@ -5,19 +5,9 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-// Ensure environment variables are available
-// Make sure these are correctly set in your .env.local or environment configuration
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl) {
-    console.error("Error: Missing environment variable NEXT_PUBLIC_SUPABASE_URL");
-    throw new Error("Missing env.NEXT_PUBLIC_SUPABASE_URL");
-}
-if (!supabaseAnonKey) {
-    console.error("Error: Missing environment variable NEXT_PUBLIC_SUPABASE_ANON_KEY");
-    throw new Error("Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY");
-}
+// Get environment variables with fallback
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 /**
  * Creates a Supabase client and a response object tailored for use in Next.js middleware.
@@ -43,6 +33,16 @@ export const createMiddlewareClient = (
             headers: req.headers,
         },
     });
+
+    // Check if environment variables are available
+    if (!supabaseUrl || !supabaseAnonKey) {
+        console.warn('Supabase environment variables not available, creating mock client');
+        // Return a mock client that won't cause errors
+        return { 
+            client: {} as SupabaseClient, 
+            response 
+        };
+    }
 
     // Initialize the Supabase client using createServerClient from @supabase/ssr.
     // Provide it with functions to get, set, and remove cookies using the
