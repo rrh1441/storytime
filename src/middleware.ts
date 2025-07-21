@@ -5,7 +5,7 @@ import { createMiddlewareClient } from '@/lib/supabase/middleware';
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|api/auth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/auth|^/$|^/quick|^/login|^/signup|^/privacy|^/pricing|^/contact|^/s/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
 
