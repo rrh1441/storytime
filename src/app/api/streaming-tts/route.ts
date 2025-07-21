@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { getOpenAIClient } from '@/lib/openai';
 import { z } from 'zod';
 
 export const runtime = 'edge';
@@ -7,10 +7,6 @@ export const runtime = 'edge';
 const bodySchema = z.object({
   text: z.string().min(1),
   voice: z.enum(['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']),
-});
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
 });
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -43,6 +39,7 @@ export async function POST(req: NextRequest): Promise<Response> {
             const chunk = chunks[i];
             
             // Generate audio for this chunk
+            const openai = getOpenAIClient();
             const mp3 = await openai.audio.speech.create({
               model: 'tts-1',
               voice: body.voice,

@@ -1,7 +1,7 @@
 // src/app/signup/page.tsx
 'use client'; // Required for hooks, state, form handling, event handlers
 
-import { useState } from 'react'; // Import useState for submitting state
+import { useState, Suspense } from 'react'; // Import useState for submitting state
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -23,8 +23,8 @@ const signupSchema = z.object({
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
-// Removed React.FC type for simpler default export
-export default function SignupPage() {
+// Separate component that uses useSearchParams
+function SignupForm() {
  const form = useForm<SignupFormValues>({
   resolver: zodResolver(signupSchema),
   defaultValues: { name: '', email: '', password: '' },
@@ -153,4 +153,22 @@ export default function SignupPage() {
    </div>
   </div>
  );
+}
+
+// Main export with Suspense boundary
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[calc(100vh-150px)] py-12 bg-[#F2FCE2] px-4">
+        <div className="w-full max-w-md p-8 space-y-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/50">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-10 w-10 text-[#06D6A0] animate-spin" />
+            <p className="text-[#6b7280] mt-4">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <SignupForm />
+    </Suspense>
+  );
 }

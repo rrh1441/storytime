@@ -1,10 +1,8 @@
 /* Edge-runtime route: POST { text: string }  →  MP3 audio */
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { getOpenAIClient } from '@/lib/openai';
 
 export const runtime = 'edge';
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 interface Body { text: string }
 
@@ -16,6 +14,7 @@ export async function POST(req: Request) {
   }
 
   try {
+    const openai = getOpenAIClient();
     const speech = await openai.audio.speech.create({
       model: 'tts-1',
       voice: 'alloy',           // pick any default narrator

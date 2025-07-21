@@ -1,15 +1,18 @@
 import { randomUUID } from "crypto";
-import { supabaseService } from "./supabase";
+import { getSupabaseService } from "./supabase";
 
 const BUCKET = process.env.STORY_AUDIO_BUCKET || "story_assets";
-
-await supabaseService.storage.createBucket(BUCKET, { public: true }).catch(() => {});
 
 export async function uploadAudio(
   filename: string,
   buf: Buffer,
   contentType = "audio/mpeg"
 ): Promise<string> {
+  const supabaseService = getSupabaseService();
+  
+  // Ensure bucket exists (idempotent operation)
+  await supabaseService.storage.createBucket(BUCKET, { public: true }).catch(() => {});
+  
   const objectPath = `${Date.now()}_${randomUUID()}_${filename}`;
 
   const { error } = await supabaseService.storage

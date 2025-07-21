@@ -1,4 +1,4 @@
-import { openai, TEXT_MODEL } from "@/lib/openai";
+import { getOpenAIClient, TEXT_MODEL } from "@/lib/openai";
 // import { createClient } from '@supabase/supabase-js'; // Browser client, not for route handlers
 // import { supabaseService } from '@/lib/supabase/service'; // Assuming this is your service role client
 // const supabaseService = createClient( // This was likely an incorrect client for a route handler
@@ -52,6 +52,7 @@ export async function POST(req: Request) {
       `Positive ending; markdown paragraphs.\n` +
       `After the story output a creative title on its own line prefixed '${TITLE_MARKER}'.`;
 
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: TEXT_MODEL,
       messages: [{ role: "user", content: prompt }],

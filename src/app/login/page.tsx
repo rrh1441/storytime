@@ -1,7 +1,7 @@
 // src/app/login/page.tsx
 'use client'; // Required for hooks, state, form handling, event handlers
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -23,7 +23,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 // Removed React.FC type for simpler default export
-export default function LoginPage() {
+function LoginForm() {
  const form = useForm<LoginFormValues>({
   resolver: zodResolver(loginSchema),
   defaultValues: { email: '', password: '' },
@@ -141,4 +141,22 @@ export default function LoginPage() {
    </div>
   </div>
  );
+}
+
+// Main export with Suspense boundary
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[calc(100vh-150px)] py-12 bg-[#F2FCE2] px-4">
+        <div className="w-full max-w-md p-8 space-y-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/50">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-10 w-10 text-[#4FB8FF] animate-spin" />
+            <p className="text-[#6b7280] mt-4">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
+  );
 }

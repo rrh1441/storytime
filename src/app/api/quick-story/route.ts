@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { getOpenAIClient } from '@/lib/openai';
 
 interface ReqBody {
   hero: string;
@@ -49,6 +45,7 @@ Make it positive, imaginative, age-appropriate (ages 4-7).
 Return plain text, no markdown.`;
 
   try {
+    const openai = getOpenAIClient();
     const chat = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       max_tokens: 220,
