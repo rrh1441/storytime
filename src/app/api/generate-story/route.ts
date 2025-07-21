@@ -6,7 +6,6 @@ import { openai, TEXT_MODEL } from "@/lib/openai";
 //   process.env.SUPABASE_SERVICE_ROLE_KEY!
 // );
 
-export const runtime = "fluid";
 
 interface StoryParams {
   storyTitle?: string | null;
