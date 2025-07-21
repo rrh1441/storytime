@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { supabaseService } from "./supabase";
 
-const BUCKET = (process.env.STORY_AUDIO_BUCKET || "story_assets") as const;
+const BUCKET = process.env.STORY_AUDIO_BUCKET || "story_assets";
 
 await supabaseService.storage.createBucket(BUCKET, { public: true }).catch(() => {});
 

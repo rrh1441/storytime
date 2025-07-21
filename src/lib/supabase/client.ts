@@ -20,7 +20,7 @@ export function getSupabaseClient(): SupabaseClient {
   }
 
   _client = createBrowserClient(url, key, {
-    cookieOptions: { lifetime: 60 * 60 * 24 * 30 }, // 30 days
+    cookieOptions: { maxAge: 60 * 60 * 24 * 30 }, // 30 days
   });
 
   return _client;

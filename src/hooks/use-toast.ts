@@ -7,6 +7,8 @@ interface ToastProps {
   description?: string
   variant?: ToastVariant
   duration?: number
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 interface ToastState {
