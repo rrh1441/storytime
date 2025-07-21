@@ -32,7 +32,7 @@ export interface AuthCtx {
  session: Session | null;
  profile: UserProfile;
  loading: boolean;
- supabase: SupabaseClient;
+ supabase: SupabaseClient | null;
  login: (args: {
   email: string;
   password?: string;
@@ -50,7 +50,7 @@ export interface AuthCtx {
 const Ctx = createContext<AuthCtx | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
- const supabase = getSupabaseClient(); // Get browser client instance
+ const supabase = getSupabaseClient(); // Get browser client instance (may be null during SSR)
 
  const [session, setSession] = useState<Session | null>(null);
  const [user, setUser] = useState<User | null>(null);
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
  /* Fetch Profile Helper */
  const fetchProfile = useCallback(async (userId: string | undefined) => {
-  if (!userId) {
+  if (!userId || !supabase) {
    setProfile(null);
    return;
   }
@@ -97,6 +97,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function getInitialSession() {
    try {
+    if (!supabase) {
+     if (mounted) setLoading(false);
+     return;
+    }
     const { data: { session: initialSession }, error } = await supabase.auth.getSession();
     if (error) {
      console.error('[AuthProvider] getSession error on initial load:', error);
@@ -121,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   getInitialSession();
 
-  const { data: listener } = supabase.auth.onAuthStateChange(
+  const listener = supabase?.auth.onAuthStateChange(
    async (_event, newSession) => {
     if (!mounted) return;
     console.log('[AuthProvider] Auth state changed:', _event, newSession);
@@ -145,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return () => {
    mounted = false;
-   listener.subscription.unsubscribe();
+   listener?.data?.subscription.unsubscribe();
   };
   // Ensure fetchProfile doesn't cause infinite loops if its identity changes unexpectedly
  }, [supabase, fetchProfile, loading, user?.id]);
@@ -154,6 +158,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
  /* Auth Actions */
  const login = useCallback(
   async (args: { email: string; password?: string; provider?: 'google' | 'github'; }) => {
+   if (!supabase) {
+    return { error: { name: "AuthApiError", message: "Supabase client not initialized" } as AuthError };
+   }
    let result: { error: AuthError | null };
    if (args.provider) {
     // For OAuth, the redirect happens, error handled on callback page typically
@@ -173,6 +180,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
  const signup = useCallback(
   async (args: { email: string; password: string; options?: { data?: Record<string, unknown>, emailRedirectTo?: string } }) => {
+   if (!supabase) {
+    return { error: { name: "AuthApiError", message: "Supabase client not initialized" } as AuthError };
+   }
    // Pass user metadata (like name) in options.data
    const { error } = await supabase.auth.signUp({
     email: args.email,
@@ -186,6 +196,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
  );
 
  const logout = useCallback(async () => {
+  if (!supabase) {
+   return { error: { name: "AuthApiError", message: "Supabase client not initialized" } as AuthError };
+  }
   const { error } = await supabase.auth.signOut();
   // Listener handles state update
   return { error };

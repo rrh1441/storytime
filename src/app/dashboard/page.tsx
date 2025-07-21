@@ -42,8 +42,8 @@ export default function Dashboard() {
     queryKey: ['stories', user?.id], // Query key depends on user ID
     queryFn: async () => {
       // Ensure user ID is available before querying
-      if (!user?.id) {
-        console.log('[Dashboard QueryFn] No user ID, returning empty array.');
+      if (!user?.id || !supabase) {
+        console.log('[Dashboard QueryFn] No user ID or supabase client, returning empty array.');
         return [];
       }
       console.log(`[Dashboard QueryFn] Fetching stories for user: ${user.id}`);

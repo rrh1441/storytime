@@ -7,7 +7,12 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 let _client: SupabaseClient | undefined;
 
-export function getSupabaseClient(): SupabaseClient {
+export function getSupabaseClient(): SupabaseClient | null {
+  // During build time or when env vars are missing, return null
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
   if (_client) return _client;
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

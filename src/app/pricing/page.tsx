@@ -98,6 +98,11 @@ export default function PricingPage() {
   // --- Calling Supabase Function ---
   // This assumes you still want to call the Edge Function.
   // Alternatively, you could create a Next.js API Route or Server Action.
+  if (!supabase) {
+   toast({ title: "Error", description: "Unable to connect to authentication service", variant: "destructive" });
+   return;
+  }
+
   try {
    console.log(`Calling create-checkout-session Edge Function for priceId: ${priceId}`);
    // Note: functions.invoke sends the user's auth token automatically
