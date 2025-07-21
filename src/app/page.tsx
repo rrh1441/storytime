@@ -9,6 +9,7 @@ import {
   Sparkles, PenTool, PlayCircle, PauseCircle, Mic, Leaf,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import QuickPreviewWidget from '@/components/QuickPreviewWidget';
 
 /*──────────────── featured stories ───────────────*/
 const featuredStories = [
@@ -141,6 +142,9 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
+
+              {/* Quick Preview Widget */}
+              <QuickPreviewWidget />
             </div>
 
             {/* Hero image */}
