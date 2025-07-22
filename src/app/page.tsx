@@ -164,27 +164,27 @@ export default function Home() {
             />
             <Step
               num={2}
-              title="Generate Story"
+              title="AI Creates & Narrates"
               Icon={Sparkles}
               bg="bg-[#E7FCEC]"
               color="text-[#06D6A0]"
-              desc="Our AI crafts a unique story. Review and edit the text."
+              desc="Our AI crafts a unique story with professional narration instantly."
             />
             <Step
               num={3}
-              title="Add Voice"
-              Icon={Mic}
-              bg="bg-[#FFEAF2]"
-              color="text-[#F8669E]"
-              desc="Select a professional narrator or use your own recorded voice."
-            />
-            <Step
-              num={4}
-              title="Enjoy!"
+              title="Experience the Magic"
               Icon={PlayCircle}
               bg="bg-[#FFF5E7]"
               color="text-[#FF9F51]"
-              desc="Listen to the narrated story with text highlighting."
+              desc="Watch text stream as the story is narrated, like a live storyteller."
+            />
+            <Step
+              num={4}
+              title="Share & Replay"
+              Icon={Mic}
+              bg="bg-[#FFEAF2]"
+              color="text-[#F8669E]"
+              desc="Save your stories and share magical moments with your family."
             />
           </div>
           <div className="mt-12 text-center">
