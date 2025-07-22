@@ -117,47 +117,25 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-[#F2FCE2] pt-20 pb-24 md:pb-32">
         <div className="container relative z-10 mx-auto px-6">
-          <div className="flex flex-col items-center lg:flex-row">
-            <div className="mb-12 w-full text-center lg:mb-0 lg:w-[55%] lg:text-left">
+          <div className="flex flex-col items-center">
+            <div className="mb-12 w-full text-center max-w-4xl">
               <h1 className="mb-6 font-display text-4xl font-bold leading-tight text-[#4FB8FF] md:text-5xl lg:text-6xl">
                 Your Ideas,
                 <span className="block text-[#FF9F51]">Their Adventures</span>
               </h1>
-              <p className="mx-auto mb-8 max-w-xl text-lg text-[#6b7280] md:text-xl lg:mx-0">
+              <p className="mx-auto mb-8 max-w-xl text-lg text-[#6b7280] md:text-xl">
                 Never run out of stories again. Create stories they&rsquo;ll always remember.
                 Transport your kids to worlds of wonder. Try your first story free!
               </p>
               {/* Quick Preview Widget */}
               <QuickPreviewWidget />
 
-              <div className="mt-8 flex justify-center lg:justify-start">
+              <div className="mt-8 flex justify-center">
                 <Link href={user ? '/create-story' : '/signup'}>
                   <Button className="h-auto rounded-full bg-[#4FB8FF] px-8 py-3 text-lg font-medium text-white shadow-lg hover:bg-[#4FB8FF]/90">
                     {user ? 'Create a Story' : 'Sign Up for More Free Stories'}
                   </Button>
                 </Link>
-              </div>
-            </div>
-
-            {/* Hero image */}
-            <div className="relative mt-10 w-full lg:mt-0 lg:w-[45%]">
-              <div className="relative aspect-[16/9] transform rotate-1 overflow-hidden rounded-3xl border-4 border-white shadow-xl">
-                <Image
-                  src="/landing_image.png"
-                  alt="Two children reading a magical story book outdoors"
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width:1024px) 90vw, 45vw"
-                />
-              </div>
-              <div className="absolute -top-6 -right-6 -z-10 h-32 w-32 rounded-full bg-[#FFDEE2] opacity-30 blur-3xl md:h-64 md:w-64" />
-              <div className="absolute -bottom-10 -left-10 -z-10 h-40 w-40 rounded-full bg-[#E5DEFF] opacity-40 blur-3xl md:h-72 md:w-72" />
-              <div className="absolute -bottom-8 right-10 z-20 rotate-12 md:right-20">
-                <Sparkles className="h-8 w-8 text-[#FFD166] md:h-12 md:w-12" />
-              </div>
-              <div className="absolute top-10 -right-3 z-20 -rotate-12 md:-right-6">
-                <Leaf className="h-10 w-10 text-[#06D6A0] opacity-80 md:h-14 md:w-14" />
               </div>
             </div>
           </div>
