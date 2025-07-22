@@ -47,8 +47,8 @@ export default function QuickPreviewWidget() {
       // Split story into sentences for streaming
       const storyLines = text
         .split(/[.!?]+/)
-        .filter(s => s.trim().length > 0)
-        .map(s => s.trim() + '.');
+        .filter((s: string) => s.trim().length > 0)
+        .map((s: string) => s.trim() + '.');
       setSentences(storyLines);
 
       // Generate TTS and wait for it to be ready
