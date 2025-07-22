@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     );
   }
 
-  /* build a 30-second story prompt */
+  /* build a 60-second story prompt */
   const prompt = `
 Write a short children's bedtime story in 6-8 sentences (~150 words).
 Theme: ${theme}. Hero: ${hero}.

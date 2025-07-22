@@ -60,7 +60,7 @@ export default function QuickPage() {
   return (
     <main className="container mx-auto px-6 py-16 max-w-3xl">
       <h1 className="text-4xl font-display font-bold mb-8 text-center">
-        Your 30-Second Story
+        Your 60-Second Story
       </h1>
 
       <form onSubmit={onSubmit} className="space-y-6">

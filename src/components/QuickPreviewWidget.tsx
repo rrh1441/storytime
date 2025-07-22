@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Play, Pause, Volume2 } from 'lucide-react';
 
@@ -12,9 +12,13 @@ export default function QuickPreviewWidget() {
   const [theme, setTheme] = useState<Theme>('Adventure');
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
+  const [sentences, setSentences] = useState<string[]>([]);
+  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [storyReady, setStoryReady] = useState(false);
+  const sentenceTimerRef = useRef<NodeJS.Timeout>();
 
   const generateStory = async () => {
     if (!hero.trim()) return;
@@ -22,8 +26,12 @@ export default function QuickPreviewWidget() {
     setLoading(true);
     setStory(null);
     setAudioUrl(null);
+    setStoryReady(false);
+    setSentences([]);
+    setCurrentSentenceIndex(0);
 
     try {
+      // Generate story text
       const response = await fetch('/api/quick-story', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,9 +41,13 @@ export default function QuickPreviewWidget() {
       if (!response.ok) throw new Error('Failed to generate story');
       
       const { story: text } = await response.json();
+      
+      // Split story into sentences
+      const storyLines = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      setSentences(storyLines);
       setStory(text);
 
-      // Try to get TTS
+      // Generate TTS
       try {
         const ttsResponse = await fetch('/api/quick-tts', {
           method: 'POST',
@@ -51,6 +63,9 @@ export default function QuickPreviewWidget() {
       } catch (ttsError) {
         console.warn('TTS failed (non-fatal):', ttsError);
       }
+
+      // Mark story as ready
+      setStoryReady(true);
     } catch (error) {
       console.error('Story generation failed:', error);
     } finally {
@@ -83,12 +98,12 @@ export default function QuickPreviewWidget() {
   return (
     <div className="mt-8 p-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+        <h3 className="text-lg font-bold text-gray-800 mb-1 flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-[#8A4FFF]" />
-          Try a 30-Second Preview
+          Try it Out
         </h3>
         <p className="text-sm text-gray-600">
-          Create a mini-story instantly - no signup required!
+          Get a 60 second story instantly with no signup required
         </p>
       </div>
 
@@ -100,7 +115,7 @@ export default function QuickPreviewWidget() {
               placeholder="Hero's name (e.g., Luna)"
               value={hero}
               onChange={(e) => setHero(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8A4FFF]/20"
+              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8A4FFF]/20 text-gray-800 placeholder-gray-500"
               maxLength={20}
             />
             
@@ -126,7 +141,7 @@ export default function QuickPreviewWidget() {
             disabled={loading || !hero.trim()}
             className="w-full bg-[#8A4FFF] hover:bg-[#7a3dff] text-white rounded-lg text-sm py-2"
           >
-            {loading ? 'Creating magic...' : 'Generate Preview'}
+            {loading ? 'Crafting Your Story...' : 'Generate Preview'}
           </Button>
         </div>
       ) : (
@@ -153,22 +168,18 @@ export default function QuickPreviewWidget() {
             
             <Button
               onClick={() => {
-                setStory(null);
-                setAudioUrl(null);
-                setAudio(null);
-                setIsPlaying(false);
+                window.location.href = '/signup';
               }}
-              variant="ghost"
               size="sm"
-              className="text-[#8A4FFF] hover:text-[#7a3dff]"
+              className="bg-[#4FB8FF] hover:bg-[#4FB8FF]/90 text-white"
             >
-              Try Another
+              Sign Up Free
             </Button>
           </div>
           
           <div className="text-center pt-2 border-t border-gray-100">
             <p className="text-xs text-gray-500 mb-2">
-              Like it? Sign up for longer stories!
+              Like it? Get 2 free full stories monthly!
             </p>
           </div>
         </div>

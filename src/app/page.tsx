@@ -127,24 +127,16 @@ export default function Home() {
                 Never run out of stories again. Create stories they&rsquo;ll always remember.
                 Transport your kids to worlds of wonder. Try your first story free!
               </p>
-              <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
+              {/* Quick Preview Widget */}
+              <QuickPreviewWidget />
+
+              <div className="mt-8 flex justify-center lg:justify-start">
                 <Link href={user ? '/create-story' : '/signup'}>
                   <Button className="h-auto rounded-full bg-[#4FB8FF] px-8 py-3 text-lg font-medium text-white shadow-lg hover:bg-[#4FB8FF]/90">
-                    {user ? 'Create a Story' : 'Sign Up For a Free Story'}
-                  </Button>
-                </Link>
-                <Link href="#how-it-works" scroll>
-                  <Button
-                    variant="outline"
-                    className="h-auto rounded-full border-[#FEC6A1] px-8 py-3 text-lg font-medium text-[#FEC6A1] hover:bg-[#FEC6A1]/10"
-                  >
-                    Explore the Magic
+                    {user ? 'Create a Story' : 'Sign Up for More Free Stories'}
                   </Button>
                 </Link>
               </div>
-
-              {/* Quick Preview Widget */}
-              <QuickPreviewWidget />
             </div>
 
             {/* Hero image */}
