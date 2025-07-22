@@ -16,7 +16,6 @@ export default function QuickPreviewWidget() {
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [storyReady, setStoryReady] = useState(false);
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);

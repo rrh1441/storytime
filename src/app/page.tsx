@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
-  Sparkles, PenTool, PlayCircle, PauseCircle, Mic, Leaf,
+  Sparkles, PenTool, PlayCircle, PauseCircle, Mic,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import QuickPreviewWidget from '@/components/QuickPreviewWidget';
