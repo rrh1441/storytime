@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Play, Pause, Volume2 } from 'lucide-react';
 
@@ -12,13 +12,9 @@ export default function QuickPreviewWidget() {
   const [theme, setTheme] = useState<Theme>('Adventure');
   const [loading, setLoading] = useState(false);
   const [story, setStory] = useState<string | null>(null);
-  const [sentences, setSentences] = useState<string[]>([]);
-  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-  const [storyReady, setStoryReady] = useState(false);
-  const sentenceTimerRef = useRef<NodeJS.Timeout>();
 
   const generateStory = async () => {
     if (!hero.trim()) return;
@@ -26,9 +22,6 @@ export default function QuickPreviewWidget() {
     setLoading(true);
     setStory(null);
     setAudioUrl(null);
-    setStoryReady(false);
-    setSentences([]);
-    setCurrentSentenceIndex(0);
 
     try {
       // Generate story text
@@ -41,10 +34,6 @@ export default function QuickPreviewWidget() {
       if (!response.ok) throw new Error('Failed to generate story');
       
       const { story: text } = await response.json();
-      
-      // Split story into sentences
-      const storyLines = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-      setSentences(storyLines);
       setStory(text);
 
       // Generate TTS
@@ -63,9 +52,6 @@ export default function QuickPreviewWidget() {
       } catch (ttsError) {
         console.warn('TTS failed (non-fatal):', ttsError);
       }
-
-      // Mark story as ready
-      setStoryReady(true);
     } catch (error) {
       console.error('Story generation failed:', error);
     } finally {
